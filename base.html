@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PyShare</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="container">
+    <nav class="nav">
+      <div class="brand">
+        <div class="logo">🗂️</div>
+        <a href="{{ url_for('index') }}"><span>PyShare</span></a>
+      </div>
+      <div class="links">
+        {% if session.username %}
+          <span class="badge">Hi, {{ session.username }}</span>
+          <a class="btn" href="{{ url_for('files') }}">My files</a>
+          <a class="btn" href="{{ url_for('upload') }}">Upload</a>
+          <a class="btn" href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+          <a class="btn" href="{{ url_for('login') }}">Login</a>
+          <a class="btn primary" href="{{ url_for('register') }}">Register</a>
+        {% endif %}
+      </div>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="grid">
+          {% for category, message in messages %}
+            <div class="card">{{ category.title() }}: {{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <div id="toast" class="toast">Copied to clipboard</div>
+
+  <script>
+    function copyToClipboard(text){
+      navigator.clipboard.writeText(text).then(()=>{
+        const t = document.getElementById('toast');
+        t.style.display = 'block';
+        setTimeout(()=>{ t.style.display='none'; }, 1400);
+      });
+    }
+  </script>
+</body>
+</html>

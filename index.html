@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+  <section class="hero">
+    <h1 style="margin:0;">Share files in seconds</h1>
+    <p class="meta" style="margin:0;">
+      Upload privately, share with a secure link. No fuss, just fast.
+    </p>
+    <div class="row" style="margin-top:.5rem;">
+      <a class="btn primary" href="{{ url_for('register') }}">Get started</a>
+      <a class="btn" href="{{ url_for('upload') }}">Upload a file</a>
+    </div>
+    <div class="meta" style="margin-top:.5rem;">Tip: Press <span class="kbd">U</span> on the Upload page to open file chooser.</div>
+  </section>
+{% endblock %}

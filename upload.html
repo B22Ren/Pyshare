@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="card" style="padding: 2rem;">
+    <h2 style="margin-top:0;">Upload a file</h2>
+    <p class="meta">Max size is controlled by <code>MAX_CONTENT_LENGTH_MB</code> (default 20MB).</p>
+
+    <form method="post" enctype="multipart/form-data">
+      <input type="file" name="file" required style="margin:.5rem 0 1rem 0;">
+      <div class="row">
+        <button class="btn primary" type="submit">Upload</button>
+        <a class="btn" href="{{ url_for('files') }}">Back to files</a>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}

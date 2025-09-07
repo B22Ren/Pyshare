@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2 style="margin: 1rem 0;">My files</h2>
+
+  {% if files|length == 0 %}
+    <div class="card">
+      <p class="meta">No files yet.</p>
+      <a class="btn primary" href="{{ url_for('upload') }}">Upload one</a>
+    </div>
+  {% else %}
+    <div class="grid files">
+      {% for f in files %}
+        <div class="card file-item">
+          <div class="file-head">
+            <div class="file-name">{{ f.orig_name }}</div>
+            <span class="badge">{{ (f.size_bytes/1024)|round(1) }} KB</span>
+          </div>
+
+          <div class="meta">Uploaded: {{ f.uploaded_at[:19].replace('T',' ') }}</div>
+
+          <div class="row">
+            <a class="btn" href="{{ url_for('download', file_id=f.id) }}">Download</a>
+
+            {% if f.share_token %}
+              <a class="btn" href="{{ url_for('public_download', token=f.share_token) }}" target="_blank">Open link</a>
+              <form method="post" action="{{ url_for('unshare', file_id=f.id) }}" style="display:inline">
+                <button class="btn" type="submit">Disable link</button>
+              </form>
+            {% else %}
+              <form method="post" action="{{ url_for('share', file_id=f.id) }}" style="display:inline">
+                <button class="btn primary" type="submit">Create share link</button>
+              </form>
+            {% endif %}
+            <span class="badge">Downloads: {{ f.downloads }}</span>
+          </div>
+
+          {% if f.share_token %}
+            <div class="copy-wrap">
+              {% set full = url_for('public_download', token=f.share_token, _external=True) %}
+              <input class="copy-input" readonly value="{{ full }}">
+              <button class="btn" type="button" onclick="copyToClipboard('{{ full }}')">Copy</button>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}
